@@ -25,7 +25,7 @@ Radio = 0
 N = 1370
 num_level=1
 hide_neuron=32
-per_net = perceptron_net.MyNet(N).to(device)
+per_net = perceptron_net.PerceptronNet(N).to(device)
 lstm_net = lstm.LSTM(N+1,hide_neuron,num_level)
 with dpg.font_registry():
     with dpg.font(f'C:\\Windows\\Fonts\\trebucbd.ttf', 13, default_font=True, tag="Default font") as f:
