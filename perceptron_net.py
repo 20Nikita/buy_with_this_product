@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-class MyNet(nn.Module):
+class PerceptronNet(nn.Module):
     def __init__(self, N):
-        super(MyNet, self).__init__()
+        super(PerceptronNet, self).__init__()
         self.L1 = nn.Linear(N, 2*N)
         self.L2 = nn.Linear(2*N, 2*N)
         self.L3 = nn.Linear(2*N, N)

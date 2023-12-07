@@ -3,7 +3,8 @@ import random
 import numpy as np
 import torch
 
-import my_net
+import perceptron_net
+import lstm
 import statistic_predict
 
 dpg.create_context()
@@ -22,8 +23,10 @@ N_column = 10
 N_row = 12
 Radio = 0
 N = 1370
-net = my_net.MyNet(N).to(device)
-
+num_level=1
+hide_neuron=32
+per_net = perceptron_net.MyNet(N).to(device)
+lstm_net = lstm.LSTM(N+1,hide_neuron,num_level)
 with dpg.font_registry():
     with dpg.font(f'C:\\Windows\\Fonts\\trebucbd.ttf', 13, default_font=True, tag="Default font") as f:
         dpg.add_font_range_hint(dpg.mvFontRangeHint_Cyrillic)
@@ -51,6 +54,7 @@ def add_basket(sender, add_data, user_data):
 def remowe_basket(sender, add_data, user_data):
     dpg.delete_item(user_data[0])
     Basket.remove(user_data[1])
+    get_stat_product()
 
 def get_stat_product():
     global tag_product
@@ -58,14 +62,16 @@ def get_stat_product():
         if Radio == 0:
             n_product = statistic_predict.statistic_predict(Basket, N, N_column)
         elif Radio == 1:
-            n_product = my_net.predict(Basket, net, N, N_column)
+            n_product = perceptron_net.predict(Basket, per_net, N, N_column)
         elif Radio == 2:
-            print("EROR Non LSTM")
+            n_product = lstm.predict(Basket, lstm_net, N, N_column,num_level,hide_neuron)
         dpg.delete_item(tag_product)
         tag_product = str(random.random())
         with dpg.group(horizontal=True, parent='product', tag=tag_product):
             for i in n_product:
                 dpg.add_button(label=data[i],height=height_Goods,width=width_Goods, callback=add_basket, user_data=i)
+    else:
+        dpg.delete_item(tag_product)
 def radio(sender, add_data, user_data):
     global Radio
     if add_data == "Cтатистика":
