@@ -37,5 +37,5 @@ def predict(
         buf = np.zeros((var_size), dtype=np.float32)
         buf[item] += 1
         input_batch = torch.tensor([buf]).to(device)
-        out, (h0, c0) = net(input_batch.cpu(), (h0, c0))
+        out, (h0, c0) = net(input_batch, (h0, c0))
     return out.argsort(descending=True)[0][:N_column].cpu().detach().numpy()
