@@ -27,8 +27,8 @@ num_level = 1
 hide_neuron = 32
 per_net = perceptron_net.PerceptronNet(N).to(device)
 per_net = perceptron_net.load_weights(per_net, "model_pers.tar")
-lstm_net = lstm.LSTM(N + 1, hide_neuron, num_level)
-lstm_net = perceptron_net.load_weights(per_net, "model_lstm.tar")
+lstm_net = lstm.LSTM(N + 1, hide_neuron, num_level).to(device)
+lstm_net = perceptron_net.load_weights(lstm_net, "model_lstm.tar")
 with dpg.font_registry():
     with dpg.font(
         f"C:\\Windows\\Fonts\\trebucbd.ttf", 13, default_font=True, tag="Default font"
@@ -87,7 +87,7 @@ def get_stat_product():
             n_product = perceptron_net.predict(Basket, per_net, N, N_column)
         elif Radio == 2:
             n_product = lstm.predict(
-                Basket, lstm_net, N, N_column, num_level, hide_neuron
+                Basket, lstm_net, N+1, N_column, num_level, hide_neuron
             )
         dpg.delete_item(tag_product)
         tag_product = str(random.random())

@@ -30,12 +30,12 @@ def predict(
     num_level: int,
     hide_neuron: int,
 ):
-    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    h0 = torch.randn(num_level, hide_neuron)
-    c0 = torch.randn(num_level, hide_neuron)
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    h0 = torch.randn(num_level, hide_neuron).to(device)
+    c0 = torch.randn(num_level, hide_neuron).to(device)
     for item in list_item:
         buf = np.zeros((var_size), dtype=np.float32)
         buf[item] += 1
-        input_batch = torch.tensor([buf])
+        input_batch = torch.tensor([buf]).to(device)
         out, (h0, c0) = net(input_batch.cpu(), (h0, c0))
-    return out.argsort(descending=True)[:N_column].cpu().detach().numpy()
+    return out.argsort(descending=True)[0][:N_column].cpu().detach().numpy()

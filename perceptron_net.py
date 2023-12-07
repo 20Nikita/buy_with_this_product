@@ -20,7 +20,7 @@ class PerceptronNet(nn.Module):
 
 
 def predict(list, net, N, N_column):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     buf = np.zeros((N), dtype=np.float32)
     for el in list:
         buf[el] += 1
@@ -30,6 +30,7 @@ def predict(list, net, N, N_column):
 
 
 def load_weights(net, path):
-    net.load_state_dict(torch.load(path), strict=True)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    net.load_state_dict(torch.load(path, map_location=device), strict=True)
     net = net.eval()
     return net
