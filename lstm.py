@@ -18,7 +18,6 @@ class LSTM(nn.Module):
         out, (h, c) = self.LSTM(x, hidden)
         out = self.dropout(out)
         x = self.fc(out)
-        x = self.fc(out)
         return x, (h, c)
 
 
