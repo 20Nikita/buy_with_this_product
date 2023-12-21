@@ -30,8 +30,16 @@ def predict(
     hide_neuron: int,
 ):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    h0 = torch.randn(num_level, hide_neuron).to(device)
-    c0 = torch.randn(num_level, hide_neuron).to(device)
+    h0 = torch.zeros(
+        num_level,
+        hide_neuron,
+        device=device,
+    )
+    c0 = torch.zeros(
+        num_level,
+        hide_neuron,
+        device=device,
+    )
     for item in list_item:
         buf = np.zeros((var_size), dtype=np.float32)
         buf[item] += 1
